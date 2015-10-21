@@ -1,0 +1,5 @@
+# bof
+*.zip
+*.pex
+/meta.ini
+# eof
