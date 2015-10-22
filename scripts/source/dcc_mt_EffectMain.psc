@@ -109,26 +109,50 @@ Function UpdateFemaleBody()
 		Return
 	EndIf
 
+	If(MT.OptScaleMethod == MT.ScaleMethodNiOverride)
+		self.UpdateFemaleBody_NiOverride()
+	ElseIf(MT.OptScaleMethod == MT.ScaleMethodNetImmerse)
+		self.UpdateFemaleBody_NetImmerse()
+	EndIf
+
+	Return
+EndFunction
+
+Function UpdateFemaleBody_NiOverride()
+{perform the scales using NiOverride (Default, ScaleMode 1)}
+
+	If(MT.OptBreastSize)
+		Float size = (self.Target.GetActorValuePercentage(self.BreastPower) * self.BreastSizeDiff) + MT.OptBreastSizeMin
+		NiOverride.AddNodeTransformScale(self.Target,False,True,"NPC L Breast","ManaTanks.Scale",size)
+		NiOverride.AddNodeTransformScale(self.Target,False,True,"NPC R Breast","ManaTanks.Scale",size)
+		NiOverride.UpdateNodeTransform(self.Target,False,True,"NPC L Breast")
+		NiOverride.UpdateNodeTransform(self.Target,False,True,"NPC R Breast")
+	EndIf
+
+	If(MT.OptBreastCurve)
+		Float curve = MT.OptBreastCurveMin - (self.Target.GetActorValuePercentage(self.BreastPower) * self.BreastCurveDiff)
+		NiOverride.AddNodeTransformScale(self.Target,False,True,"NPC L Breast01","ManaTanks.Scale",curve)
+		NiOverride.AddNodeTransformScale(self.Target,False,True,"NPC R Breast01","ManaTanks.Scale",curve)
+		NiOverride.UpdateNodeTransform(self.Target,False,True,"NPC L Breast01")
+		NiOverride.UpdateNodeTransform(self.Target,False,True,"NPC R Breast01")
+	EndIf
+
+	Return
+EndFunction
+
+Function UpdateFemaleBody_NetImmerse()
+{perform the scales using NetImmerse (ScaleMode 2)}
+
 	If(MT.OptBreastSize)
 		Float size = (self.Target.GetActorValuePercentage(self.BreastPower) * self.BreastSizeDiff) + MT.OptBreastSizeMin
 		NetImmerse.SetNodeScale(self.Target,"NPC L Breast",size,false)
 		NetImmerse.SetNodeScale(self.Target,"NPC R Breast",size,false)
-
-		;;NiOverride.AddNodeTransformScale(self.Target,False,True,"NPC L Breast","DCC_ManaTanks",size)
-		;;NiOverride.AddNodeTransformScale(self.Target,False,True,"NPC R Breast","DCC_ManaTanks",size)
-		;;NiOverride.UpdateNodeTransform(self.Target,False,True,"NPC L Breast")
-		;;NiOverride.UpdateNodeTransform(self.Target,False,True,"NPC R Breast")
 	EndIf
 
 	If(MT.OptBreastCurve)
 		Float curve = MT.OptBreastCurveMin - (self.Target.GetActorValuePercentage(self.BreastPower) * self.BreastCurveDiff)
 		NetImmerse.SetNodeScale(self.Target,"NPC L Breast01",curve,false)
 		NetImmerse.SetNodeScale(self.Target,"NPC R Breast01",curve,false)
-
-		;;NiOverride.AddNodeTransformScale(self.Target,False,True,"NPC L Breast01","DCC_ManaTanks",curve)
-		;;NiOverride.AddNodeTransformScale(self.Target,False,True,"NPC R Breast01","DCC_ManaTanks",curve)
-		;;NiOverride.UpdateNodeTransform(self.Target,False,True,"NPC L Breast01")
-		;;NiOverride.UpdateNodeTransform(self.Target,False,True,"NPC R Breast01")
 	EndIf
 
 	Return

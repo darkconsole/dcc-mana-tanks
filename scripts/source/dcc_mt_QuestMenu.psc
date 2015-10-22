@@ -19,6 +19,10 @@ Int   Property OptBreastPoolMax  = 666 Auto Hidden
 Float Property OptUpdateInterval = 0.25 Auto Hidden
 Float Property OptMaintInterval  = 5.0 Auto Hidden
 
+Int   Property OptScaleMethod    = 1 Auto Hidden
+Int   Property ScaleMethodNiOverride = 1 AutoReadOnly Hidden
+Int   Property ScaleMethodNetImmerse = 2 AutoReadOnly Hidden
+
 ;; reference properties
 Actor Property Player Auto
 Spell Property SpellMain Auto
@@ -127,6 +131,10 @@ Event OnOptionSliderOpen(Int Menu)
 		SetSliderDialogStartValue(self.OptBreastPoolMax)
 		SetSliderDialogRange(100,1500)
 		SetSliderDialogInterval(10.0)
+	ElseIf Menu == MenuScaleMethod
+		SetSliderDialogStartValue(self.OptScaleMethod)
+		SetSliderDialogRange(1,2)
+		SetSliderDialogInterval(1.0)
 	EndIf
 
 	Return
@@ -154,6 +162,9 @@ Event OnOptionSliderAccept(Int Menu, Float Val)
 		SetSliderOptionValue(Menu,Val,"{2}")
 	ElseIf Menu == MenuBreastPoolMax
 		self.OptBreastPoolMax = Val as Int
+		SetSliderOptionValue(Menu,Val,"{0}")
+	ElseIf Menu == MenuScaleMethod
+		self.OptScaleMethod = Val as Int
 		SetSliderOptionValue(Menu,Val,"{0}")
 	EndIf
 
@@ -185,6 +196,8 @@ Event OnOptionHighlight(Int Menu)
 		SetInfoText("Link the max breast size to the max amount of mana/health/stamina you have. This means they will start small and grow as you level it.")
 	ElseIf Menu == MenuBreastPoolMax
 		SetInfoText("How much mana/health/stamina you have to have before the breasts reach full size.")
+	ElseIf Menu == MenuScaleMethod
+		SetInfoText("1 = NiOverride (Default), 2 = NetImmerse")
 	Else
 		SetInfoText("Mana (.)(.) Tanks")
 	EndIf
@@ -213,6 +226,7 @@ Int MenuBreastSizeMax
 Int MenuBreastPool
 Int MenuBreastPoolMax
 Int MenuUpdateInterval
+Int MenuScaleMethod
 
 Function ShowPageGeneral()
 	SetTitleText("General Options")
@@ -229,6 +243,7 @@ Function ShowPageGeneral()
 
 	SetCursorPosition(1)
 	AddHeaderOption("Body Size Options")
+	MenuScaleMethod = AddSliderOption("Scale Method",self.OptScaleMethod,"{0}")
 	MenuBreastSize = AddToggleOption("Enable Breast Scaling",self.OptBreastSize)
 	MenuBreastSizeMin = AddSliderOption("Breast Size Min",self.OptBreastSizeMin,"{1}")
 	MenuBreastSizeMax = AddSliderOption("Breast Size Max",self.OptBreastSizeMax,"{1}")
